@@ -54,7 +54,7 @@ const YESCAPTCHA_API = "https://api.yescaptcha.com";
 const TURNSTILE_SITE_KEY = "0x4AAAAAADLyZ9ztTUV1Pm1F";
 let TURNSTILE_SITE_URL = "https://rpow2.com";
 
-async function solveTurnstile(clientKey) {
+async function solveTurnstileOnce(clientKey) {
   log("info", "submitting Turnstile task to YesCaptcha...");
   const createRes = await fetch(`${YESCAPTCHA_API}/createTask`, {
     method: "POST",
@@ -94,6 +94,21 @@ async function solveTurnstile(clientKey) {
     log("info", `Turnstile solving... (${i + 1}/40)`);
   }
   throw new Error("YesCaptcha: timed out waiting for Turnstile solution");
+}
+
+async function solveTurnstile(clientKey, maxAttempts = 3) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await solveTurnstileOnce(clientKey);
+    } catch (err) {
+      if (attempt < maxAttempts) {
+        log("warn", `Turnstile attempt ${attempt}/${maxAttempts} failed, retrying...`, { error: err.message });
+        await sleep(2000);
+      } else {
+        throw err;
+      }
+    }
+  }
 }
 const COLORS = {
   reset: "\x1b[0m",
