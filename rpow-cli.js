@@ -1285,6 +1285,19 @@ async function main() {
           log("warn", "session invalid; rerun login/complete-login, then rerun mine to resume");
           throw err;
         }
+        // 504 on /mint means server received the request but timed out responding.
+        // The mint likely processed server-side. Don't retry (avoids duplicate), just continue.
+        if (err.status === 504 || err.name === "AbortError") {
+          consecutiveRecoverableFailures = 0;
+          log("warn", "mint request timed out (server may have processed it); starting next challenge immediately", {
+            error: err.message,
+            status: err.status,
+          });
+          client.state.challenge = null;
+          client.state.mining = null;
+          client.save();
+          continue;
+        }
         if (isRecoverableMineError(err)) {
           consecutiveRecoverableFailures += 1;
           const delay = mineRetryDelayMs(consecutiveRecoverableFailures, err);
