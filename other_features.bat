@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal enabledelayedexpansion
 chcp 65001 >nul 2>&1
 
@@ -19,38 +19,38 @@ if exist ".start-config.json" (
 
 goto :main_menu
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :main_menu
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║          RPOW Miner  ^|  Tools ^& Features                        ║
-echo  ║          github.com/stablemarkk/rpow_cli_miner                   ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |          RPOW Miner  ^|  Tools ^& Features                        |
+echo  |          github.com/stablemarkk/rpow_cli_miner                   |
+echo  +-------------------------------------------------------------------+
 echo.
 echo   State file : %STATE_FILE%
 if defined SAVED_EMAIL (
     echo   Account    : !SAVED_EMAIL!
 )
 echo.
-echo  ─── Account ────────────────────────────────────────────────────────
+echo  --- Account --------------------------------------------------------
 echo.
 echo    [1]  My Account Info        View balance, minted, sent, received
 echo    [2]  Activity History       List all your recent transactions
 echo    [3]  Send RPOW              Transfer tokens to another user
 echo.
-echo  ─── Network ────────────────────────────────────────────────────────
+echo  --- Network --------------------------------------------------------
 echo.
 echo    [4]  Ledger / Stats         Network supply, difficulty, halving info
 echo    [5]  API Map                Show all available API endpoints
 echo.
-echo  ─── Session ────────────────────────────────────────────────────────
+echo  --- Session --------------------------------------------------------
 echo.
 echo    [6]  Cookie Login           Log in by pasting your session cookie
 echo    [7]  Logout                 Clear saved session from this device
 echo    [8]  Check Session          Test whether current session is valid
 echo.
-echo  ─── Settings ───────────────────────────────────────────────────────
+echo  --- Settings -------------------------------------------------------
 echo.
 echo    [9]  Change State File      Switch which account state file to use
 echo    [0]  Exit
@@ -73,13 +73,13 @@ pause >nul
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_me
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [1] My Account Info                                             ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [1] My Account Info                                             |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Connects to the RPOW server and shows your current account details.
@@ -94,12 +94,12 @@ echo.
 echo  Requirements:
 echo    You must be logged in. Run [8] Check Session if unsure.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Press ENTER to fetch account info, or type B to go back: "
 if /i "!GO!"=="b" goto :main_menu
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js me --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -108,18 +108,18 @@ if errorlevel 1 (
     echo      Run option [8] to check your session status.
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_activity
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [2] Activity History                                            ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [2] Activity History                                            |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Fetches your full transaction history from the RPOW server.
@@ -133,12 +133,12 @@ echo.
 echo  Requirements:
 echo    You must be logged in.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Press ENTER to fetch activity, or type B to go back: "
 if /i "!GO!"=="b" goto :main_menu
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js activity --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -146,18 +146,18 @@ if errorlevel 1 (
     echo  [!] Command failed. Make sure you are logged in.
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_send
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [3] Send RPOW                                                   ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [3] Send RPOW                                                   |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Transfers RPOW tokens from your account to another user.
@@ -181,7 +181,7 @@ echo.
 echo  Requirements:
 echo    You must be logged in with sufficient balance.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Type B to go back, or press ENTER to continue: "
 if /i "!GO!"=="b" goto :main_menu
@@ -209,7 +209,7 @@ if "!SEND_AMOUNT!"=="" (
 )
 
 echo.
-echo  ─── Confirm ────────────────────────────────────────────────────────
+echo  --- Confirm --------------------------------------------------------
 echo.
 echo    Send  !SEND_AMOUNT! RPOW  →  !RECIPIENT!
 echo.
@@ -222,7 +222,7 @@ if /i not "!CONFIRM!"=="yes" (
 )
 
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js send --to "!RECIPIENT!" --amount "!SEND_AMOUNT!" --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -234,18 +234,18 @@ if errorlevel 1 (
     echo      - Network issue
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_ledger
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [4] Ledger / Network Stats                                      ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [4] Ledger / Network Stats                                      |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Fetches public network-wide statistics from the RPOW server.
@@ -267,12 +267,12 @@ echo    halving_index      — how many halvings have happened so far
 echo    is_capped          — whether max supply has been reached
 echo    max_supply         — total maximum supply
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Press ENTER to fetch ledger, or type B to go back: "
 if /i "!GO!"=="b" goto :main_menu
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js ledger --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -280,18 +280,18 @@ if errorlevel 1 (
     echo  [!] Command failed. Check your network connection.
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_map
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [5] API Map                                                     ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [5] API Map                                                     |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Reads the bundled index.js from rpow2.com and prints a summary
@@ -304,27 +304,27 @@ echo    - API origin URL
 echo    - Each endpoint: method + path  (e.g. POST /auth/request)
 echo    - Mining protocol description
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Press ENTER to show API map, or type B to go back: "
 if /i "!GO!"=="b" goto :main_menu
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js map --state "%STATE_FILE%"
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_cookie_login
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [6] Cookie Login                                                ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [6] Cookie Login                                                |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Lets you log in by pasting your session cookie directly.
@@ -348,7 +348,7 @@ echo    Cookie: rpow_session=abc123xyz...          (with header prefix)
 echo.
 echo  The tool will automatically clean up whatever format you paste.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Type B to go back, or press ENTER to continue: "
 if /i "!GO!"=="b" goto :main_menu
@@ -365,7 +365,7 @@ if "!COOKIE_VALUE!"=="" (
 )
 
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js cookie-login --cookie "!COOKIE_VALUE!" --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -377,18 +377,18 @@ if errorlevel 1 (
     echo      - Network error connecting to api.rpow2.com
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_logout
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [7] Logout                                                      ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [7] Logout                                                      |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    1. Tells the RPOW server to invalidate your current session token.
@@ -402,7 +402,7 @@ echo.
 echo  Note: This only logs out THIS device. Other devices with their own
 echo  state files are not affected.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "CONFIRM=  Type YES to log out, or anything else to cancel: "
 if /i not "!CONFIRM!"=="yes" (
@@ -412,7 +412,7 @@ if /i not "!CONFIRM!"=="yes" (
     goto :main_menu
 )
 echo.
-echo  ─── Result ─────────────────────────────────────────────────────────
+echo  --- Result ---------------------------------------------------------
 echo.
 node rpow-cli.js logout --state "%STATE_FILE%"
 if errorlevel 1 (
@@ -421,18 +421,18 @@ if errorlevel 1 (
     echo      the session). Local session cookie has still been cleared.
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_check_session
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [8] Check Session                                               ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [8] Check Session                                               |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Calls GET /me on the RPOW server to check whether the session
@@ -444,7 +444,7 @@ echo    INVALID — Session has expired or was never set.
 echo              → Run  start.bat  to log in again, or
 echo              → Use option [6] Cookie Login to paste a cookie.
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "GO=  Press ENTER to check session, or type B to go back: "
 if /i "!GO!"=="b" goto :main_menu
@@ -452,19 +452,19 @@ echo.
 
 node rpow-cli.js me --state "%STATE_FILE%" >nul 2>&1
 if "!errorlevel!"=="0" (
-    echo  ┌────────────────────────────────────────────────────────────────┐
-    echo  │  SESSION STATUS:  VALID  ✓                                     │
-    echo  │  Your session is active and mining commands will work.         │
-    echo  └────────────────────────────────────────────────────────────────┘
+    echo  +----------------------------------------------------------------+
+    echo  |  SESSION STATUS:  VALID  ✓                                     |
+    echo  |  Your session is active and mining commands will work.         |
+    echo  +----------------------------------------------------------------+
     echo.
     echo  Fetching account details...
     echo.
     node rpow-cli.js me --state "%STATE_FILE%"
 ) else (
-    echo  ┌────────────────────────────────────────────────────────────────┐
-    echo  │  SESSION STATUS:  INVALID  ✗                                   │
-    echo  │  You are not logged in or your session has expired.            │
-    echo  └────────────────────────────────────────────────────────────────┘
+    echo  +----------------------------------------------------------------+
+    echo  |  SESSION STATUS:  INVALID  ✗                                   |
+    echo  |  You are not logged in or your session has expired.            |
+    echo  +----------------------------------------------------------------+
     echo.
     echo  To log in:
     echo    Option A — Close this window and run  start.bat
@@ -473,18 +473,18 @@ if "!errorlevel!"=="0" (
     echo               (paste a cookie you already have from a browser)
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :fn_change_state
 cls
 echo.
-echo  ╔═══════════════════════════════════════════════════════════════════╗
-echo  ║  [9] Change State File                                           ║
-echo  ╚═══════════════════════════════════════════════════════════════════╝
+echo  +-------------------------------------------------------------------+
+echo  |  [9] Change State File                                           |
+echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
 echo    Lets you switch which account state file this tool uses.
@@ -506,7 +506,7 @@ echo    This change only lasts for the current session of this tool.
 echo    To make it permanent, edit STATE_FILE at the top of other_features.bat
 echo    or run  start.bat  (which also uses .rpow-a.json by default).
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 echo.
 set /p "NEW_STATE=  Enter new state file name (or B to go back): "
 if /i "!NEW_STATE!"=="b" goto :main_menu
@@ -542,12 +542,12 @@ if exist "!STATE_FILE!" (
     echo       File does not exist yet — it will be created on first login.
 )
 echo.
-echo  ────────────────────────────────────────────────────────────────────
+echo  --------------------------------------------------------------------
 set /p "BACK=  Press ENTER to return to main menu..."
 goto :main_menu
 
 
-:: ═══════════════════════════════════════════════════════════════════════
+:: -----------------------------------------------------------------------
 :exit_bat
 echo.
 echo  Goodbye!
