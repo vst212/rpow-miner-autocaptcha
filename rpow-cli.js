@@ -51,7 +51,7 @@ function registerCustomOrigins(...origins) {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const YESCAPTCHA_API = "https://api.yescaptcha.com";
-const TURNSTILE_SITE_KEY = "0x4AAAAAADLyZ9ztTUV1Pm1F";
+const TURNSTILE_SITE_KEY = process.env.RPOW_TURNSTILE_KEY || "0x4AAAAAADLyZ9ztTUV1Pm1F";
 let TURNSTILE_SITE_URL = "https://rpow2.com";
 
 async function solveTurnstileOnce(clientKey) {
