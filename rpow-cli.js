@@ -222,7 +222,7 @@ function mineRetryDelayMs(failures, err) {
 }
 
 function postMintDelayMs() {
-  return 3000 + Math.floor(Math.random() * 350);
+  return 4000 + Math.floor(Math.random() * 350);
 }
 
 function loadState(file) {
