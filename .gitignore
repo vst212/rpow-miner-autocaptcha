@@ -1,0 +1,25 @@
+# account state files  (contain session cookies — never commit)
+.rpow-*.json
+rpow-*.json
+.rpow-cli-state.json
+
+# secrets
+.env
+
+# launcher saved config  (local preferences)
+.start-config.json
+
+# build artefacts
+*.exe
+*.o
+*.obj
+*.so
+*.dylib
+
+# temp / OS junk
+*.tmp
+*.zip
+*.log
+Thumbdb
+.DS_Store
+desktop.ini
