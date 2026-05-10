@@ -51,8 +51,23 @@ function registerCustomOrigins(...origins) {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const YESCAPTCHA_API = "https://api.yescaptcha.com";
-const TURNSTILE_SITE_KEY = process.env.RPOW_TURNSTILE_KEY || "0x4AAAAAADLyZ9ztTUV1Pm1F";
+let TURNSTILE_SITE_KEY = process.env.RPOW_TURNSTILE_KEY || "0x4AAAAAADLyZ9ztTUV1Pm1F";
 let TURNSTILE_SITE_URL = "https://rpow2.com";
+
+async function fetchTurnstileSiteKey(siteUrl) {
+  try {
+    const res = await fetch(siteUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    const html = await res.text();
+    const match = /data-sitekey=["']([^"']+)["']/.exec(html);
+    if (match) {
+      log("info", "detected Turnstile site key from page", { key: match[1] });
+      return match[1];
+    }
+  } catch (err) {
+    log("warn", "could not fetch site key from page, using default", { error: err.message });
+  }
+  return null;
+}
 
 async function solveTurnstileOnce(clientKey) {
   log("info", "submitting Turnstile task to YesCaptcha...");
@@ -1012,6 +1027,11 @@ async function main() {
     let body = { email };
     const captchaKey = args["captcha-key"] || process.env.YESCAPTCHA_KEY;
     if (captchaKey) {
+      // auto-detect site key from page if not manually configured
+      if (!process.env.RPOW_TURNSTILE_KEY) {
+        const detected = await fetchTurnstileSiteKey(resolvedSite);
+        if (detected) TURNSTILE_SITE_KEY = detected;
+      }
       const token = await solveTurnstile(captchaKey);
       body.turnstile_token = token;
     }
