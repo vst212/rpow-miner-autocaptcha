@@ -25,8 +25,8 @@ const { Worker } = require("worker_threads");
   }
 })();
 
-const DEFAULT_SITE_ORIGIN = "https://rpow2.com";
-const DEFAULT_API_ORIGIN = "https://api.rpow2.com";
+const DEFAULT_SITE_ORIGIN = process.env.RPOW_SITE || "https://rpow2.com";
+const DEFAULT_API_ORIGIN = process.env.RPOW_API  || "https://api.rpow2.com";
 const DEFAULT_INDEX = path.join(__dirname, "index.js");
 const DEFAULT_STATE = path.join(__dirname, ".rpow-cli-state.json");
 const MINER_WORKER = path.join(__dirname, "rpow-miner-worker.js");
@@ -973,11 +973,15 @@ async function main() {
   globalThis.__RPOW_VERBOSE__ = args.verbose === true;
   const command = args._[0] || "help";
   const discovered = discoverFromIndex(args.index || DEFAULT_INDEX);
-  registerCustomOrigins(args.api, args.site);
-  if (args.site) TURNSTILE_SITE_URL = args.site;
+  const envSite = process.env.RPOW_SITE;
+  const envApi  = process.env.RPOW_API;
+  const resolvedSite = args.site || envSite || DEFAULT_SITE_ORIGIN;
+  const resolvedApi  = args.api  || envApi  || discovered.apiOrigin;
+  registerCustomOrigins(resolvedSite, resolvedApi);
+  TURNSTILE_SITE_URL = resolvedSite;
   const client = new RpowClient({
-    apiOrigin: args.api || discovered.apiOrigin,
-    siteOrigin: args.site || DEFAULT_SITE_ORIGIN,
+    apiOrigin: resolvedApi,
+    siteOrigin: resolvedSite,
     stateFile: args.state || DEFAULT_STATE,
     timeoutMs: args.timeout || 45000,
     retries: args.retries || 5,
