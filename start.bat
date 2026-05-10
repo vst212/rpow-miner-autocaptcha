@@ -45,7 +45,7 @@ echo  [OK] Node.js %NODE_VER%
 set "CAPTCHA_KEY="
 
 if exist "%ENV_FILE%" (
-    for /f "usebackq tokens=1,* delims==" %%a in ("%ENV_FILE%") do (
+    for /f "usebackq eol=| tokens=1,* delims==" %%a in ("%ENV_FILE%") do (
         if "%%a"=="YESCAPTCHA_KEY" set "CAPTCHA_KEY=%%b"
     )
 )
@@ -83,16 +83,16 @@ set "SAVED_GPU_LOCAL="
 set "USE_RESUME=N"
 
 if exist "%CONFIG_FILE%" (
-    :: Parse config JSON via Node
-    for /f "delims=" %%L in ('node -e "try{const c=require('./%CONFIG_FILE%');const lines=['EMAIL='+c.email,'ENGINE='+c.engine,'WORKERS='+c.workers,'GPU_BATCH='+(c.gpu_batch||''),'GPU_LOCAL='+(c.gpu_local||'')];lines.forEach(l=>console.log(l))}catch(e){}" 2^>nul') do (
-        for /f "tokens=1,* delims==" %%a in ("%%L") do (
-            if "%%a"=="EMAIL"     set "SAVED_EMAIL=%%b"
-            if "%%a"=="ENGINE"    set "SAVED_ENGINE=%%b"
-            if "%%a"=="WORKERS"   set "SAVED_WORKERS=%%b"
-            if "%%a"=="GPU_BATCH" set "SAVED_GPU_BATCH=%%b"
-            if "%%a"=="GPU_LOCAL" set "SAVED_GPU_LOCAL=%%b"
-        )
+    rem Parse config JSON via Node  (:: cannot be used as comment inside blocks)
+    node -e "try{var c=JSON.parse(require('fs').readFileSync('%CONFIG_FILE%','utf8'));['EMAIL='+c.email,'ENGINE='+c.engine,'WORKERS='+c.workers,'GPU_BATCH='+(c.gpu_batch||''),'GPU_LOCAL='+(c.gpu_local||'')].forEach(function(l){console.log(l)})}catch(e){}" > _tmp_cfg.txt 2>nul
+    for /f "usebackq eol=| tokens=1,* delims==" %%a in ("_tmp_cfg.txt") do (
+        if "%%a"=="EMAIL"     set "SAVED_EMAIL=%%b"
+        if "%%a"=="ENGINE"    set "SAVED_ENGINE=%%b"
+        if "%%a"=="WORKERS"   set "SAVED_WORKERS=%%b"
+        if "%%a"=="GPU_BATCH" set "SAVED_GPU_BATCH=%%b"
+        if "%%a"=="GPU_LOCAL" set "SAVED_GPU_LOCAL=%%b"
     )
+    del _tmp_cfg.txt >nul 2>&1
 
     if not "!SAVED_EMAIL!"=="" (
         echo.
