@@ -1039,10 +1039,11 @@ async function main() {
         const detected = await fetchTurnstileSiteKey(resolvedSite);
         if (detected) {
           TURNSTILE_SITE_KEY = detected;
-          shouldSolve = true;
+          log("info", "using detected Turnstile site key");
         } else {
-          log("info", "skipping Turnstile — no site key found on page (login may not require it)");
+          log("info", "no site key detected on page, will try with default key");
         }
+        shouldSolve = true;
       }
       if (shouldSolve) {
         const token = await solveTurnstile(captchaKey);
