@@ -163,13 +163,11 @@ echo    [1] GPU  - OpenCL  (fastest, up to 700x vs browser)
 if "!GPU_READY!"=="N" echo         ! rpow-gpu-miner.exe not found - will auto-build
 echo    [2] CPU  - native C workers  (fast)
 if "!NATIVE_READY!"=="N" echo         ! rpow-native-miner.exe not found - will auto-build
-echo    [3] Node - JavaScript fallback  (slowest, no build needed)
 echo.
-set /p "ENGINE_CHOICE=  Choice [1/2/3, default=1]: "
-if "!ENGINE_CHOICE!"=="" set "ENGINE_CHOICE=1"
+set /p "ENGINE_CHOICE=  Choice [1/2, default=2]: "
+if "!ENGINE_CHOICE!"=="" set "ENGINE_CHOICE=2"
 if "!ENGINE_CHOICE!"=="1" set "ENGINE=gpu"
 if "!ENGINE_CHOICE!"=="2" set "ENGINE=native"
-if "!ENGINE_CHOICE!"=="3" set "ENGINE=node"
 if "!ENGINE!"=="" (
     echo  [ERROR] Invalid choice.
     pause
