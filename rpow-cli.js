@@ -63,6 +63,7 @@ async function fetchTurnstileSiteKey(siteUrl) {
       log("info", "detected Turnstile site key from page", { key: match[1] });
       return match[1];
     }
+    log("info", "no data-sitekey found in page HTML, using default/env key");
   } catch (err) {
     log("warn", "could not fetch site key from page, using default", { error: err.message });
   }
