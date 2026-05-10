@@ -465,7 +465,8 @@ class RpowClient {
           throw e;
         }
         const retryable = err.retryable || isTransientNetworkError(err);
-        if (!retryable || attempt > this.maxRetries) throw err;
+        const blockedByNoRetry = options.noRetryStatuses && err.status && options.noRetryStatuses.includes(err.status);
+        if (!retryable || blockedByNoRetry || attempt > this.maxRetries) throw err;
         const challengeCooldown = isChallengeRequest(method, url) && err?.status === 429 && err?.code === "COOLDOWN";
         const backoff = Math.min(30000, 500 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 250);
         const parsedCooldown = challengeCooldown ? (cooldownDelayMs(err) ?? 2500) : null;
@@ -1266,7 +1267,7 @@ async function main() {
         const result = await client.api("POST", "/mint", {
           challenge_id: challenge.challenge_id,
           solution_nonce: solution.solution_nonce,
-        });
+        }, { noRetryStatuses: [504] });
         minted += 1;
         consecutiveRecoverableFailures = 0;
         client.state.last_mint = result;
