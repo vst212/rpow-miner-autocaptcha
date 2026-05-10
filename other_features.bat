@@ -24,8 +24,8 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |          RPOW Miner  ^|  Tools ^& Features                        |
-echo  |          github.com/stablemarkk/rpow_cli_miner                   |
+echo  ^|          RPOW Miner  ^|  Tools ^& Features                        ^|
+echo  ^|          github.com/stablemarkk/rpow_cli_miner                   ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo   State file : %STATE_FILE%
@@ -78,7 +78,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [1] My Account Info                                             |
+echo  ^|  [1] My Account Info                                             ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -118,7 +118,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [2] Activity History                                            |
+echo  ^|  [2] Activity History                                            ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -156,7 +156,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [3] Send RPOW                                                   |
+echo  ^|  [3] Send RPOW                                                   ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -244,7 +244,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [4] Ledger / Network Stats                                      |
+echo  ^|  [4] Ledger / Network Stats                                      ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -290,7 +290,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [5] API Map                                                     |
+echo  ^|  [5] API Map                                                     ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -323,7 +323,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [6] Cookie Login                                                |
+echo  ^|  [6] Cookie Login                                                ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -387,7 +387,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [7] Logout                                                      |
+echo  ^|  [7] Logout                                                      ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -431,7 +431,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [8] Check Session                                               |
+echo  ^|  [8] Check Session                                               ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -453,8 +453,8 @@ echo.
 node rpow-cli.js me --state "%STATE_FILE%" >nul 2>&1
 if "!errorlevel!"=="0" (
     echo  +----------------------------------------------------------------+
-    echo  |  SESSION STATUS:  VALID  ✓                                     |
-    echo  |  Your session is active and mining commands will work.         |
+    echo  ^|  SESSION STATUS:  VALID  ✓                                     ^|
+    echo  ^|  Your session is active and mining commands will work.         ^|
     echo  +----------------------------------------------------------------+
     echo.
     echo  Fetching account details...
@@ -462,8 +462,8 @@ if "!errorlevel!"=="0" (
     node rpow-cli.js me --state "%STATE_FILE%"
 ) else (
     echo  +----------------------------------------------------------------+
-    echo  |  SESSION STATUS:  INVALID  ✗                                   |
-    echo  |  You are not logged in or your session has expired.            |
+    echo  ^|  SESSION STATUS:  INVALID  ✗                                   ^|
+    echo  ^|  You are not logged in or your session has expired.            ^|
     echo  +----------------------------------------------------------------+
     echo.
     echo  To log in:
@@ -483,7 +483,7 @@ goto :main_menu
 cls
 echo.
 echo  +-------------------------------------------------------------------+
-echo  |  [9] Change State File                                           |
+echo  ^|  [9] Change State File                                           ^|
 echo  +-------------------------------------------------------------------+
 echo.
 echo  What this does:
@@ -518,7 +518,7 @@ if "!NEW_STATE!"=="" (
 )
 
 :: Basic validation — must end in .json
-echo !NEW_STATE! | findstr /i "\.json$" >nul 2>&1
+echo !NEW_STATE! ^| findstr /i "\.json$" >nul 2>&1
 if errorlevel 1 (
     echo.
     echo  [!] File name must end in .json
