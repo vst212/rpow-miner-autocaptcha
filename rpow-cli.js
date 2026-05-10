@@ -427,11 +427,10 @@ class RpowClient {
         const retryable = err.retryable || isTransientNetworkError(err);
         if (!retryable || attempt > this.maxRetries) throw err;
         const challengeCooldown = isChallengeRequest(method, url) && err?.status === 429 && err?.code === "COOLDOWN";
-        const backoff = challengeCooldown
-          ? 5000
-          : Math.min(30000, 500 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 250);
+        const backoff = Math.min(30000, 500 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 250);
+        const parsedCooldown = challengeCooldown ? (cooldownDelayMs(err) ?? 2500) : null;
         const delay = challengeCooldown
-          ? Math.max(5000, Math.min(err.retryAfterMs || 0, 60000))
+          ? Math.max(parsedCooldown, Math.min(err.retryAfterMs || 0, 60000))
           : Math.max(backoff, Math.min(err.retryAfterMs || 0, 60000));
         log("warn", `request failed, retrying in ${delay}ms`, {
           method,
