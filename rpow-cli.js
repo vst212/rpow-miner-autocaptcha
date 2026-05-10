@@ -386,7 +386,7 @@ class RpowClient {
     while (true) {
       attempt += 1;
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+      const timeout = setTimeout(() => controller.abort(), options.timeoutMs || this.timeoutMs);
       const started = Date.now();
       try {
         const headers = {
@@ -1267,7 +1267,7 @@ async function main() {
         const result = await client.api("POST", "/mint", {
           challenge_id: challenge.challenge_id,
           solution_nonce: solution.solution_nonce,
-        }, { noRetryStatuses: [504] });
+        }, { noRetryStatuses: [504], timeoutMs: 5000 });
         minted += 1;
         consecutiveRecoverableFailures = 0;
         client.state.last_mint = result;
