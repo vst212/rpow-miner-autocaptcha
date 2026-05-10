@@ -152,15 +152,18 @@ if /i "!USE_RESUME!"=="Y" (
 )
 
 set "GPU_READY=N"
+set "NATIVE_READY=N"
 if exist "rpow-gpu-miner.exe" set "GPU_READY=Y"
+if exist "rpow-native-miner.exe" set "NATIVE_READY=Y"
 
 echo.
 echo  --- Mining Engine ---
 echo.
 echo    [1] GPU  - OpenCL  (fastest, up to 700x vs browser)
-if "!GPU_READY!"=="N" echo         ! rpow-gpu-miner.exe not found - run build-gpu.ps1 first
+if "!GPU_READY!"=="N" echo         ! rpow-gpu-miner.exe not found - will auto-build
 echo    [2] CPU  - native C workers  (fast)
-echo    [3] Node - JavaScript fallback  (slowest)
+if "!NATIVE_READY!"=="N" echo         ! rpow-native-miner.exe not found - will auto-build
+echo    [3] Node - JavaScript fallback  (slowest, no build needed)
 echo.
 set /p "ENGINE_CHOICE=  Choice [1/2/3, default=1]: "
 if "!ENGINE_CHOICE!"=="" set "ENGINE_CHOICE=1"
@@ -174,9 +177,11 @@ if "!ENGINE!"=="" (
 )
 
 if "!ENGINE!"=="gpu" goto :check_gpu_ready
-goto :after_gpu_build
+if "!ENGINE!"=="native" goto :check_native_ready
+goto :after_build
+
 :check_gpu_ready
-if "!GPU_READY!"=="Y" goto :after_gpu_build
+if "!GPU_READY!"=="Y" goto :after_build
 echo.
 echo  [INFO] Building GPU miner ...
 powershell -ExecutionPolicy Bypass -File ".\build-gpu.ps1"
@@ -186,8 +191,23 @@ if exist "rpow-gpu-miner.exe" (
 ) else (
     echo  [WARN] GPU build failed. Falling back to native CPU.
     set "ENGINE=native"
+    goto :check_native_ready
 )
-:after_gpu_build
+goto :after_build
+
+:check_native_ready
+if "!NATIVE_READY!"=="Y" goto :after_build
+echo.
+echo  [INFO] Building native CPU miner ...
+powershell -ExecutionPolicy Bypass -File ".\build-native.ps1"
+if exist "rpow-native-miner.exe" (
+    echo  [OK] Native miner built.
+    set "NATIVE_READY=Y"
+) else (
+    echo  [WARN] Native build failed. Falling back to Node.js.
+    set "ENGINE=node"
+)
+:after_build
 
 rem --- 7. Resource presets ---
 set /a CPU_COUNT=%NUMBER_OF_PROCESSORS%
