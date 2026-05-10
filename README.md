@@ -15,7 +15,8 @@ browser mining and 35× faster than CPU.
 | `start.bat` | Interactive launcher: detects session, auto-login with captcha, engine + resource selection, resume |
 | `other_features.bat` | GUI menu for account info, activity, send, ledger, cookie-login, logout, session check |
 | YesCaptcha auto-solve | Automatically solves Cloudflare Turnstile during login (no manual copy-paste) |
-| `.env` loader | `YESCAPTCHA_KEY` stored in `.env` — no extra npm packages |
+| `.env` loader | `YESCAPTCHA_KEY`, `RPOW_SITE`, `RPOW_API` stored in `.env` — no extra npm packages |
+| Multi-server | Switch between rpow2.com / rpow3.com (or any server) via `.env` or `--site`/`--api` flags |
 | Decimal send | `--amount 1.25` — supports up to 9 decimal places via `amount_base_units` |
 | Modern API | `formatBaseUnits` / `parseRpowToBaseUnits` — handles both legacy and modern server responses |
 | Cookie login | `cookie-login` command strips `Cookie:` headers, quotes, whitespace automatically |
@@ -142,6 +143,23 @@ start.bat
 ```
 
 `.start-config.json` and `.env` are excluded from git (see `.gitignore`).
+
+## Switching servers
+
+The default server is **rpow2.com**. To mine on a different server, add these lines to your `.env`:
+
+```
+RPOW_SITE=https://rpow3.com
+RPOW_API=https://api.rpow3.com
+```
+
+Or pass them as flags per-run:
+
+```powershell
+node rpow-cli.js mine --site https://rpow3.com --api https://api.rpow3.com --state .rpow-a.json
+```
+
+Priority: `--site`/`--api` flags > `.env` values > default (rpow2.com).
 
 ---
 

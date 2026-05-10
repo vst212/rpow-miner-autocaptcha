@@ -11,7 +11,8 @@
 | `start.bat` | 交互式启动器：检测会话、自动登录（含验证码）、选择引擎与资源、断点续挖 |
 | `other_features.bat` | 图形菜单：账户信息、活动记录、发送、账本、Cookie 登录、登出、会话检查 |
 | YesCaptcha 自动识别 | 登录时自动识别 Cloudflare Turnstile（无需手动复制粘贴） |
-| `.env` 加载器 | `YESCAPTCHA_KEY` 保存在 `.env` 中，无需额外 npm 包 |
+| `.env` 加载器 | `YESCAPTCHA_KEY`、`RPOW_SITE`、`RPOW_API` 保存在 `.env` 中，无需额外 npm 包 |
+| 多服务器支持 | 通过 `.env` 或 `--site`/`--api` 参数切换 rpow2.com / rpow3.com（或任意服务器） |
 | 小数发送 | `--amount 1.25` — 最多支持 9 位小数，通过 `amount_base_units` 实现 |
 | 现代 API | `formatBaseUnits` / `parseRpowToBaseUnits` — 兼容新旧服务器响应格式 |
 | Cookie 登录 | `cookie-login` 命令自动去除 `Cookie:` 前缀、引号及多余空白 |
@@ -134,6 +135,23 @@ start.bat
 ```
 
 `.start-config.json` 和 `.env` 已被 `.gitignore` 排除在版本控制之外。
+
+## 切换挖矿服务器
+
+默认服务器为 **rpow2.com**。如需切换到其他服务器，在 `.env` 中添加：
+
+```
+RPOW_SITE=https://rpow3.com
+RPOW_API=https://api.rpow3.com
+```
+
+或每次运行时通过参数指定：
+
+```powershell
+node rpow-cli.js mine --site https://rpow3.com --api https://api.rpow3.com --state .rpow-a.json
+```
+
+优先级：`--site`/`--api` 参数 > `.env` 设置 > 默认值（rpow2.com）。
 
 ---
 
