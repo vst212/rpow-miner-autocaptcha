@@ -36,14 +36,23 @@ const SAFE_HOSTS = new Set([
   "api.rpow2.com",
   "rpow2.com",
   "www.rpow2.com",
+  "api.rpow3.com",
+  "rpow3.com",
+  "www.rpow3.com",
   "127.0.0.1.sslip.io",
 ]);
+function registerCustomOrigins(...origins) {
+  for (const o of origins) {
+    if (!o) continue;
+    try { SAFE_HOSTS.add(new URL(o).hostname); } catch {}
+  }
+}
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const YESCAPTCHA_API = "https://api.yescaptcha.com";
 const TURNSTILE_SITE_KEY = "0x4AAAAAADLyZ9ztTUV1Pm1F";
-const TURNSTILE_SITE_URL = "https://rpow2.com";
+let TURNSTILE_SITE_URL = "https://rpow2.com";
 
 async function solveTurnstile(clientKey) {
   log("info", "submitting Turnstile task to YesCaptcha...");
@@ -222,7 +231,7 @@ function mineRetryDelayMs(failures, err) {
 }
 
 function postMintDelayMs() {
-  return 4000 + Math.floor(Math.random() * 350);
+  return 5000 + Math.floor(Math.random() * 350);
 }
 
 function loadState(file) {
@@ -964,6 +973,8 @@ async function main() {
   globalThis.__RPOW_VERBOSE__ = args.verbose === true;
   const command = args._[0] || "help";
   const discovered = discoverFromIndex(args.index || DEFAULT_INDEX);
+  registerCustomOrigins(args.api, args.site);
+  if (args.site) TURNSTILE_SITE_URL = args.site;
   const client = new RpowClient({
     apiOrigin: args.api || discovered.apiOrigin,
     siteOrigin: args.site || DEFAULT_SITE_ORIGIN,
