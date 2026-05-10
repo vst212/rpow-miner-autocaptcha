@@ -1028,13 +1028,26 @@ async function main() {
     let body = { email };
     const captchaKey = args["captcha-key"] || process.env.YESCAPTCHA_KEY;
     if (captchaKey) {
-      // auto-detect site key from page if not manually configured
-      if (!process.env.RPOW_TURNSTILE_KEY) {
+      // Only solve Turnstile if:
+      // 1. User explicitly set RPOW_TURNSTILE_KEY, OR
+      // 2. We successfully detected a site key from the page HTML
+      let shouldSolve = false;
+      if (process.env.RPOW_TURNSTILE_KEY) {
+        shouldSolve = true;
+        log("info", "using Turnstile site key from RPOW_TURNSTILE_KEY env");
+      } else {
         const detected = await fetchTurnstileSiteKey(resolvedSite);
-        if (detected) TURNSTILE_SITE_KEY = detected;
+        if (detected) {
+          TURNSTILE_SITE_KEY = detected;
+          shouldSolve = true;
+        } else {
+          log("info", "skipping Turnstile — no site key found on page (login may not require it)");
+        }
       }
-      const token = await solveTurnstile(captchaKey);
-      body.turnstile_token = token;
+      if (shouldSolve) {
+        const token = await solveTurnstile(captchaKey);
+        body.turnstile_token = token;
+      }
     }
     await client.api("POST", "/auth/request", body);
     client.state.email = email;
