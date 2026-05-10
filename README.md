@@ -1,5 +1,7 @@
 # rpow-miner-autocaptcha
 
+[中文说明 (简体)](README.zh-CN.md)
+
 A fork of [stablemarkk/rpow_cli_miner](https://github.com/stablemarkk/rpow_cli_miner) with an
 interactive Windows launcher, Cloudflare Turnstile auto-solve, and a full-featured tools menu.
 
