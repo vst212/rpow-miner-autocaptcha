@@ -331,7 +331,7 @@ class RpowClient {
     this.siteOrigin = options.siteOrigin;
     this.stateFile = options.stateFile;
     this.state = loadState(this.stateFile);
-    this.timeoutMs = Number(options.timeoutMs || 20000);
+    this.timeoutMs = Number(options.timeoutMs || 45000);
     this.maxRetries = Number(options.retries || 5);
   }
 
@@ -969,7 +969,7 @@ async function main() {
     apiOrigin: args.api || discovered.apiOrigin,
     siteOrigin: args.site || DEFAULT_SITE_ORIGIN,
     stateFile: args.state || DEFAULT_STATE,
-    timeoutMs: args.timeout || 20000,
+    timeoutMs: args.timeout || 45000,
     retries: args.retries || 5,
   });
 
